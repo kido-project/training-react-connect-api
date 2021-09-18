@@ -6,13 +6,13 @@ class App extends Component  {
     return (
         <div>
             <div className="navbar navbar-default">
-                <a className="navbar-brand">API Connect</a>
+                <a className="navbar-brand" href="#">API Connect</a>
                 <ul className="nav navbar-nav">
                 <li className="active">
-                    <a>Home</a>
+                    <a href="#">Home</a>
                 </li>
                 <li>
-                    <a>Products</a>
+                    <a href="#">Products</a>
                 </li>
                 </ul>
             </div>
