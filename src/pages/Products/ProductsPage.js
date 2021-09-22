@@ -2,10 +2,30 @@ import React, { Component } from 'react';
 import Products from './../../components/Products/Products'
 import Product from './../../components/Product/Product'
 import { connect } from 'react-redux';
+import api from '../../utils/api';
 
 class ProductsPage extends Component  {
+  constructor(props) {
+    super(props);
+    this.state = {
+      products: []
+    }
+  }
+
+  //life circle hook
+  //call when component render first time
+  componentDidMount() {
+    api('products', 'GET', null).then((response) =>{
+      console.log(response);
+      this.setState({
+        products: response.data
+      });
+    });
+  }
+
   render() {
-    var { products } = this.props;
+    var {products} = this.state;
+    
     return (
         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                       <button type="button" className="btn btn-info mb-10">Add product</button>
