@@ -3,6 +3,7 @@ import Products from './../../components/Products/Products'
 import Product from './../../components/Product/Product'
 import { connect } from 'react-redux';
 import api from '../../utils/api';
+import { Link } from 'react-router-dom';
 
 class ProductsPage extends Component  {
   constructor(props) {
@@ -28,7 +29,7 @@ class ProductsPage extends Component  {
     
     return (
         <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                      <button type="button" className="btn btn-info mb-10">Add product</button>
+                      <Link to="/product/add" className="btn btn-info mb-10">Add product</Link>
                       <Products>
                         { this.showProducts(products) }
                       </Products>
