@@ -42,8 +42,8 @@ class ProductActionPage extends Component  {
       price: price,
       status: status,
     }).then(response => {
-      // history.goBack();
-      history.push('/products');
+      // history.goBack(); return previous page
+      history.push('/'); //go to page
     })
   }
 
