@@ -13,6 +13,22 @@ class ProductActionPage extends Component  {
     };
   }
 
+  componentDidMount = () => {
+    var { match } = this.props;
+    if(match) {
+      var id = match.params.id;
+      api(`products/${id}`, 'GET', null).then((response) =>{
+        console.log(response.data);
+        this.setState({
+          id: response.data.id,
+          code: response.data.code, 
+          name: response.data.name, 
+          price: response.data.price, 
+          status: response.data.status, 
+        });
+      });
+    }
+  }
   onChange = (event) => {
     var target = event.target;
     var name = target.name;
@@ -33,18 +49,29 @@ class ProductActionPage extends Component  {
 
   onSubmit = (event) => {
     event.preventDefault();
-    var { code, name, price, status } = this.state;
+    var { id, code, name, price, status } = this.state;
     var { history } = this.props;
-
-    api('products', 'POST', {
-      code: code,
-      name: name,
-      price: price,
-      status: status,
-    }).then(response => {
-      // history.goBack(); return previous page
-      history.push('/'); //go to page
-    })
+    if(id) {
+      api(`products/${id}`, 'PUT', {
+        code: code,
+        name: name,
+        price: price,
+        status: status,
+      }).then(response => {
+        // history.goBack(); return previous page
+        history.push('/products'); //go to page
+      })
+    } else {
+      api('products', 'POST', {
+        code: code,
+        name: name,
+        price: price,
+        status: status,
+      }).then(response => {
+        // history.goBack(); return previous page
+        history.push('/products'); //go to page
+      })
+    }
   }
 
   render() {
@@ -68,7 +95,9 @@ class ProductActionPage extends Component  {
               <label>Status</label>
               <div className="checkbox">
                 <label>
-                  <input type="checkbox" name='status' value={ status } onChange={ this.onChange }/>
+                  <input 
+                  checked={status}
+                  type="checkbox" name='status' value={ status } onChange={ this.onChange }/>
                   Checkbox
                 </label>
               </div>

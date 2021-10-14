@@ -17,7 +17,6 @@ class ProductsPage extends Component  {
   //call when component render first time
   componentDidMount() {
     api('products', 'GET', null).then((response) =>{
-      console.log(response);
       this.setState({
         products: response.data
       });
