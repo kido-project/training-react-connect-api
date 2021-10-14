@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Product extends Component  {
   onDelete = (productId) => {
@@ -17,7 +18,12 @@ class Product extends Component  {
       <td>{ product.price }$</td>
       <td><span className={`label label-${classStatus}`}>{ product.status ? 'Available' : 'Out of stock' }</span></td>
       <td>
-      <button type="button" className="btn btn-success mr-10">Edit</button>
+      <Link
+        to={`/product/${product.id}/edit`}
+        className="btn btn-success mr-10"
+      >
+        Edit
+      </Link>
       <button type="button" className="btn btn-danger ml-10" onClick={ () => this.onDelete(product.id) }>
         Delete
       </button>
