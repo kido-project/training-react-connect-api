@@ -1,46 +1,38 @@
-var initialState = [
-    {
-        id: 1,
-        code: '101011',
-        name: 'Macbook Pro 2019',
-        price: 1500,
-        status: false,
-      },
-      {
-        id: 2,
-        code: '101012',
-        name: 'Macbook Pro 2020',
-        price: 2000,
-        status: false,
-      },
-      {
-        id: 3,
-        code: '101013',
-        name: 'Macbook Pro 2021',
-        price: 2500,
-        status: true,
-      },
-      {
-        id: 4,
-        code: '101014',
-        name: 'Macbook Pro 2022',
-        price: 3000,
-        status: true,
-      },
-      {
-        id: 5,
-        code: '101015',
-        name: 'Macbook M12',
-        price: 3500,
-        status: true,
-      },
-];
+import * as Types from './../constants/ActionTypes';
+
+var initialState = [];
 
 const products =  (state = initialState, action) => {
-    switch(action.type){
+    var index = -1;
+    var {productId} = action;
+    switch(action.type) {
+        case Types.GET_PRODUCTS: 
+          state = action.products;
+          return [...state];
+        case Types.ADD_PRODUCT:
+          var {product} = action;
+          state.push(product);
+          return [...state];
+        case Types.DELETE_PRODUCT:
+          index = findIndexProduct(state, productId);
+          state.splice(index, 1);
+          return [...state];
+        case Types.UPDATE_PRODUCT: 
+          index = findIndexProduct(state, action.product.id);
+          state[index] = action.product;
+          return [...state];
         default:
             return [...state];
     }
+}
+
+var findIndexProduct = (products, id) => {
+  var result = -1;
+  products.forEach((product, index) => {
+    if (product.id === id) 
+      result = index;
+  });
+  return result;
 }
 
 export default products;
