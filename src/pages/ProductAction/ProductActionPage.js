@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../../utils/api';
+import { actionAddProductRequest, actionGetProductRequest, actionUpdateProductRequest } from './../../actions/index';
+import { connect } from 'react-redux';
+
 class ProductActionPage extends Component  {
   constructor(props) {
     super(props);
@@ -17,25 +19,22 @@ class ProductActionPage extends Component  {
     var { match } = this.props;
     if(match) {
       var id = match.params.id;
-      api(`products/${id}`, 'GET', null).then((response) =>{
-        console.log(response.data);
-        this.setState({
-          id: response.data.id,
-          code: response.data.code, 
-          name: response.data.name, 
-          price: response.data.price, 
-          status: response.data.status, 
-        });
-      });
+      this.props.getProduct(id);
     }
   }
-  onChange = (event) => {
-    var target = event.target;
-    var name = target.name;
-    var value = target.type === 'checkbox' ? target.checked : target.value;
-    this.setState({
-      [name]: value
-    })
+
+  componentWillReceiveProps = (nextProps) => {
+    if(nextProps && nextProps.product) {
+      var {product} = nextProps;
+      console.log(product);
+      this.setState({
+        id: product.id,
+        code: product.code, 
+        name: product.name, 
+        price: product.price, 
+        status: product.status, 
+      });
+    }
   }
 
   onChange = (event) => {
@@ -52,25 +51,22 @@ class ProductActionPage extends Component  {
     var { id, code, name, price, status } = this.state;
     var { history } = this.props;
     if(id) {
-      api(`products/${id}`, 'PUT', {
+      this.props.updateProduct({
+        id: id,
         code: code,
         name: name,
         price: price,
         status: status,
-      }).then(response => {
-        // history.goBack(); return previous page
-        history.push('/products'); //go to page
-      })
+      });
+      history.goBack(); //return previous page
     } else {
-      api('products', 'POST', {
+      this.props.addProduct({
         code: code,
         name: name,
         price: price,
         status: status,
-      }).then(response => {
-        // history.goBack(); return previous page
-        history.push('/products'); //go to page
-      })
+      });
+      history.push('/products'); //go to page
     }
   }
 
@@ -109,5 +105,24 @@ class ProductActionPage extends Component  {
     );
   }
 }
+const mapStateToProps = state => { //~ const mapStateToProps = (state) => {
+  return {
+    product: state.product
+  }
+}
 
-export default ProductActionPage;
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    addProduct: (product) => {
+      dispatch(actionAddProductRequest(product));
+    },
+    getProduct: (productId) => {
+      dispatch(actionGetProductRequest(productId));
+    },
+    updateProduct: (product) => {
+      dispatch(actionUpdateProductRequest(product));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (ProductActionPage);

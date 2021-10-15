@@ -7,6 +7,7 @@ class Product extends Component  {
       this.props.onDelete(productId);
     }
   }
+  
   render() {
     var { product } = this.props;
     var classStatus = product.status ? 'success' : 'danger'
